@@ -1,0 +1,14 @@
+
+<h1>Log In</h1>
+<p>Logged in as: {{request.user}}</p>
+<br>
+<form action="{% url 'accounts:logout' %}" method="post">
+	{% csrf_token %}
+	<button class="btn btn-primary btn-sm" type="submit">Log Out</button>
+</form>
+<hr>
+<form action='{% url "accounts:login" %}' method="post">
+	{% csrf_token %}
+	{{ form }}
+	<input type="submit" name="Log In">
+</form>

@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
 	list_display = ('email', 'is_seller', 'is_buyer',)
 	list_filter = ('email', 'is_seller', 'is_buyer',)
 	fieldsets = (
-		(None, {'fields': ('email', 'password')}),
+		(None, {'fields': ('email', 'password', 'date_joined')}),
 		('Permissions', {'fields': ('is_staff', 'is_active', 'is_seller', 'is_buyer')}),
 	)
 
