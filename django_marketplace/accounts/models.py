@@ -9,6 +9,8 @@ from .managers import CustomUserManager
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
 	email = models.EmailField(_('email address'), unique=True)
+	first_name = models.CharField(max_length=40)
+	last_name = models.CharField(max_length=40)
 	is_buyer = models.BooleanField(default=True)
 	is_seller = models.BooleanField(default=False)
 	is_staff = models.BooleanField(default=False)
