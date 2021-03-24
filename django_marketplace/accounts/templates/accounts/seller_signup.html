@@ -1,0 +1,14 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h1>Become a seller</h1>
+<hr>
+<form method="POST" enctype="multipart/form-data"> 
+	{% csrf_token %}
+	{{form.as_p}}
+	<button type="submit" class="btn btn-primary">SignUp</button>
+
+</form>
+
+<a href="{% url 'accounts:seller_signup' %}">click me</a>
+
+{% endblock %}

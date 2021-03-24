@@ -14,6 +14,7 @@ class CustomUserAdmin(UserAdmin):
 	list_filter = ('email', 'is_seller', 'is_buyer',)
 	fieldsets = (
 		(None, {'fields': ('email', 'password', 'first_name', 'last_name', 'date_joined')}),
+		('Stripe', {'fields':('stripe_customer_id', 'stripe_seller_id',)}),
 		('Permissions', {'fields': ( 'is_buyer', 'is_seller', 'is_staff', 'is_active')}),
 	)
 
