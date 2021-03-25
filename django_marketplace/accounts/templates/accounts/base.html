@@ -16,11 +16,7 @@
 			{% else %}
 				<li class="pull-right">logged in as: {{ request.user.first_name }} </li>
 				<li class="pull-right"><a href="{% url 'accounts:logout' %}">Logout</a>
-	<!-- 				<form action="{% url 'accounts:logout' %}" method="post">
-						{% csrf_token %}
-						<input type="submit" class="btn btn-link" name="logout" value='logout'>
-						<button class="btn btn-link" type="submit">Log Out</button> 
-					</form> -->
+				<li class="pull-right"><a href="{% url 'accounts:seller_signup' %}">Become a Seller</a></li>
 				</li>
 			{% endif %}
 		</ol>

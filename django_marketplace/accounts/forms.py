@@ -13,8 +13,3 @@ class CustomUserChangeForm(UserChangeForm):
 		model = CustomUser
 		fields = ('email',)
 
-class StripeSellerSignupForm(UserChangeForm):
-
-	class Meta:
-		model = CustomUser
-		fields = ('stripe_seller_id',)

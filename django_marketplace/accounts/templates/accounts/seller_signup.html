@@ -2,13 +2,10 @@
 {% block content %}
 <h1>Become a seller</h1>
 <hr>
-<form method="POST" enctype="multipart/form-data"> 
-	{% csrf_token %}
-	{{form.as_p}}
-	<button type="submit" class="btn btn-primary">SignUp</button>
 
-</form>
-
-<a href="{% url 'accounts:seller_signup' %}">click me</a>
-
+{% if request.user.stripe_seller_id == '' or None %}
+	<a href="{% url 'accounts:setup_stripe_connect' %}">click me to become a seller</a>
+{% else %}
+	<p>already a seller</p>
+{% endif %}
 {% endblock %}
