@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -67,6 +67,27 @@ def setup_stripe_connect(request, *args, **kwargs):
 		obj.save()
 
 	return redirect('accounts:seller_signup')
+
+def settings_view(request):
+	return render(request, 'accounts/settings.html')
+
+def update_user_view(request):
+	form = CustomUserChangeForm()
+	if request.method == 'POST':
+		form = CustomUserChangeForm(request.POST, request.FILES)
+		if form.is_valid():
+			obj = CustomUser.objects.get(email=request.user.email)
+			obj.email = form.cleaned_data['email']
+			obj.first_name = form.cleaned_data['first_name']
+			obj.last_name = form.cleaned_data['last_name']
+			obj.save()
+			return redirect('accounts:update_user')
+
+	context = {
+		'form': form
+	}
+	return render(request, 'accounts/update_user.html', context)
+
 
 
 

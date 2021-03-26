@@ -14,6 +14,7 @@
 				<li class='pull-right'><a href="{% url 'accounts:signup' %}">Sign Up</a></li>
 				<li class="pull-right"><a href="{% url 'accounts:login' %}">Login</a></li>
 			{% else %}
+				<li class="pull-right"><a href="{% url 'accounts:settings' %}">Settings</a></li>
 				<li class="pull-right">logged in as: {{ request.user.first_name }} </li>
 				<li class="pull-right"><a href="{% url 'accounts:logout' %}">Logout</a>
 				<li class="pull-right"><a href="{% url 'accounts:seller_signup' %}">Become a Seller</a></li>
