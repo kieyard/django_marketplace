@@ -88,6 +88,23 @@ def update_user_view(request):
 	}
 	return render(request, 'accounts/update_user.html', context)
 
+import time
+def accept_stripe_TOS(request):
+	obj = CustomUser.objects.get(email=request.user.email)
+
+	stripe.Account.modify(
+		obj.stripe_seller_id,
+		tos_acceptance={
+		'date': int(time.time()),
+		'ip': '8.8.8.8', # Depends on what web framework you're using
+		}
+	)
+
+	obj.stripe_seller_TOS_accepted = True
+	obj.save()
+
+	return redirect('accounts:seller_signup')
+
 
 
 

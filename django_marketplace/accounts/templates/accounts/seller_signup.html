@@ -5,6 +5,9 @@
 
 {% if request.user.stripe_seller_id == '' or None %}
 	<a href="{% url 'accounts:setup_stripe_connect' %}">click me to become a seller</a>
+{% elif request.user.stripe_seller_TOS_accepted == False %}
+	<p>please accept stripes TOS:</p>
+	<a href="{% url 'accounts:accept_stripe_TOS' %}"><button type="submit" class="btn btn-primary">Accept TOS</button></a>
 {% else %}
 	<p>already a seller</p>
 {% endif %}

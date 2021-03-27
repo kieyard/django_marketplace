@@ -23,6 +23,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 	date_joined = models.DateTimeField(default=timezone.now)
 	stripe_customer_id = models.CharField(max_length=40)
 	stripe_seller_id = models.CharField(max_length=40, default= '')
+	stripe_seller_TOS_accepted = models.BooleanField(default=False)
 
 
 	USERNAME_FIELD = 'email'
