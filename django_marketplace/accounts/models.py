@@ -46,3 +46,22 @@ def post_save_create(sender, instance, created, *args, **kwargs):
 		user.save()
 
 post_save.connect(post_save_create, sender=settings.AUTH_USER_MODEL)
+
+
+
+class StripeConnectSetup(models.Model):
+	first_name = models.CharField(max_length=40)
+	last_name = models.CharField(max_length=40)
+	email = models.EmailField()
+	#DOB = models.DateField()
+	phone = models.CharField(max_length=13)
+	#business_types = ['individual','company',]
+	#business_type=models.CharField(max_length=20, choices=business_types)
+	address_line_1 = models.CharField(max_length=100)
+	address_line_2 = models.CharField(max_length=100)
+	city = models.CharField(max_length=100)
+	country = models.CharField(max_length=3)
+	postal_code = models.CharField(max_length=7)
+	
+	
+

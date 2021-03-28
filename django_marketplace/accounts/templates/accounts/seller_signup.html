@@ -4,6 +4,12 @@
 <hr>
 
 {% if request.user.stripe_seller_id == '' or None %}
+	
+	<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+		{{form.as_p}}
+		<button type="submit" class="btn btn-primary">SignUp</button>
+	</form>
+	<br>
 	<a href="{% url 'accounts:setup_stripe_connect' %}">click me to become a seller</a>
 {% elif request.user.stripe_seller_TOS_accepted == False %}
 	<p>please accept stripes TOS:</p>

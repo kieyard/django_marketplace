@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, StripeConnectSetupForm
 from .models import CustomUser
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -44,7 +44,48 @@ def logout_view(request):
 	return redirect('accounts:login')
 
 def seller_signup_view(request):
-	return render(request, 'accounts/seller_signup.html')
+	form = StripeConnectSetupForm()
+	if request.method == 'POST':
+		form = StripeConnectSetupForm(request.POST, request.FILES)
+		if form.is_valid():
+			account = stripe.Account.create(
+				type="custom",
+				country=form.cleaned_data['country'],
+				email=form.cleaned_data['email'],
+				capabilities={
+			    	"card_payments": {"requested": True},
+			    	"transfers": {"requested": True},
+				},
+				business_type='individual',
+				individual = {
+					"address":{
+						"city": form.cleaned_data['city'],
+						"country": form.cleaned_data['country'],
+						"line1": form.cleaned_data['address_line_1'],
+						"line2": form.cleaned_data['address_line_2'],
+						"postal_code": form.cleaned_data['postal_code']
+					},
+					# "dob":{
+					# 	"day": 7,
+					# 	"month": 5,
+					# 	"year":1990
+					# },
+					"email": form.cleaned_data['email'],
+					"first_name":form.cleaned_data['first_name'],
+					"last_name":form.cleaned_data['last_name'],
+					"phone": form.cleaned_data['phone'],
+				}
+			)
+			obj = CustomUser.objects.get(email=request.user.email)
+			obj.stripe_seller_id = account.id
+			obj.is_seller = True
+			obj.save()
+
+	context = {
+		'form' : form
+	}
+
+	return render(request, 'accounts/seller_signup.html', context)
 
 def setup_stripe_connect(request, *args, **kwargs):
 	obj = CustomUser.objects.get(email=request.user.email)
