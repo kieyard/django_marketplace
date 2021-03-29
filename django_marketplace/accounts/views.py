@@ -47,7 +47,7 @@ def seller_signup_view(request):
 	form = StripeConnectSetupForm()
 	if request.method == 'POST':
 		form = StripeConnectSetupForm(request.POST, request.FILES)
-		if form.is_valid():
+		if form.is_valid() and form.cleaned_data['accept_TOS']:
 			account = stripe.Account.create(
 				type="custom",
 				country=form.cleaned_data['country'],
@@ -65,17 +65,25 @@ def seller_signup_view(request):
 						"line2": form.cleaned_data['address_line_2'],
 						"postal_code": form.cleaned_data['postal_code']
 					},
-					# "dob":{
-					# 	"day": 7,
-					# 	"month": 5,
-					# 	"year":1990
-					# },
+					"dob":{
+						"day": form.cleaned_data['DOB'].day,
+					 	"month": form.cleaned_data['DOB'].month,
+					 	"year":form.cleaned_data['DOB'].year
+					},
 					"email": form.cleaned_data['email'],
 					"first_name":form.cleaned_data['first_name'],
 					"last_name":form.cleaned_data['last_name'],
 					"phone": form.cleaned_data['phone'],
+				},
+				business_profile={
+					'mcc': '4225'
+				},
+				tos_acceptance={
+					'date': int(time.time()),
+					'ip': '8.8.8.8',
 				}
 			)
+
 			obj = CustomUser.objects.get(email=request.user.email)
 			obj.stripe_seller_id = account.id
 			obj.is_seller = True

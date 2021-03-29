@@ -17,4 +17,4 @@ class CustomUserChangeForm(UserChangeForm):
 class StripeConnectSetupForm(forms.ModelForm):
 	class Meta:
 		model = StripeConnectSetup
-		fields = ('first_name','last_name','email','phone','address_line_1','address_line_2','city','country','postal_code')
+		fields = ('first_name','last_name','email', 'DOB' ,'phone','address_line_1','address_line_2','city','country','postal_code', 'accept_TOS')

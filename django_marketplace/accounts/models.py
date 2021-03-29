@@ -53,7 +53,7 @@ class StripeConnectSetup(models.Model):
 	first_name = models.CharField(max_length=40)
 	last_name = models.CharField(max_length=40)
 	email = models.EmailField()
-	#DOB = models.DateField()
+	DOB = models.DateField(auto_now=False,auto_now_add=False)
 	phone = models.CharField(max_length=13)
 	#business_types = ['individual','company',]
 	#business_type=models.CharField(max_length=20, choices=business_types)
@@ -62,6 +62,7 @@ class StripeConnectSetup(models.Model):
 	city = models.CharField(max_length=100)
 	country = models.CharField(max_length=3)
 	postal_code = models.CharField(max_length=7)
+	accept_TOS = models.BooleanField()
 	
 	
 
