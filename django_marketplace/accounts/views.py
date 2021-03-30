@@ -48,6 +48,19 @@ def seller_signup_view(request):
 	if request.method == 'POST':
 		form = StripeConnectSetupForm(request.POST, request.FILES)
 		if form.is_valid() and form.cleaned_data['accept_TOS']:
+			idf = stripe.File.create(
+				purpose="identity_document",
+				file=form.cleaned_data['identity_document_front']
+			)
+			idb = stripe.File.create(
+				purpose="identity_document",
+				file=form.cleaned_data['identity_document_back']
+			)
+			addi = stripe.File.create(
+				purpose="identity_document",
+				file=form.cleaned_data['additional_ID']
+			)
+			
 			account = stripe.Account.create(
 				type="custom",
 				country=form.cleaned_data['country'],
@@ -74,6 +87,15 @@ def seller_signup_view(request):
 					"first_name":form.cleaned_data['first_name'],
 					"last_name":form.cleaned_data['last_name'],
 					"phone": form.cleaned_data['phone'],
+					"verification":{
+						"document":{
+							"front": idf.id,
+							"back": idb.id,
+						},
+						"additional_document":{
+							"front": addi.id,
+						},
+					},
 				},
 				business_profile={
 					'mcc': '4225'

@@ -62,6 +62,9 @@ class StripeConnectSetup(models.Model):
 	city = models.CharField(max_length=100)
 	country = models.CharField(max_length=3)
 	postal_code = models.CharField(max_length=7)
+	identity_document_front = models.ImageField(upload_to='images',blank=True)
+	identity_document_back = models.ImageField(upload_to='images',blank=True)
+	additional_ID = models.ImageField(upload_to='images',blank=True)
 	accept_TOS = models.BooleanField()
 	
 	
