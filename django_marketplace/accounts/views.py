@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 import stripe
 from django.conf import settings
 stripe.api_key = settings.STRIPE_SECRET_KEY
+import time
 
 def signup_view(request, *args, **kwargs):
 	form = CustomUserCreationForm()
@@ -117,27 +118,6 @@ def seller_signup_view(request):
 
 	return render(request, 'accounts/seller_signup.html', context)
 
-def setup_stripe_connect(request, *args, **kwargs):
-	obj = CustomUser.objects.get(email=request.user.email)
-
-	if obj.stripe_seller_id == '' or None:
-
-		account = stripe.Account.create(
-		type="custom",
-		country="GB",
-		email=request.user,
-		capabilities={
-				"card_payments": {"requested": True},
-				"transfers": {"requested": True},
-			},
-		)
-		print(account.id)
-
-		obj.stripe_seller_id = account.id
-		obj.is_seller = True
-		obj.save()
-
-	return redirect('accounts:seller_signup')
 
 def settings_view(request):
 	return render(request, 'accounts/settings.html')
@@ -159,22 +139,7 @@ def update_user_view(request):
 	}
 	return render(request, 'accounts/update_user.html', context)
 
-import time
-def accept_stripe_TOS(request):
-	obj = CustomUser.objects.get(email=request.user.email)
 
-	stripe.Account.modify(
-		obj.stripe_seller_id,
-		tos_acceptance={
-		'date': int(time.time()),
-		'ip': '8.8.8.8', # Depends on what web framework you're using
-		}
-	)
-
-	obj.stripe_seller_TOS_accepted = True
-	obj.save()
-
-	return redirect('accounts:seller_signup')
 
 
 
