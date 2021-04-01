@@ -45,7 +45,9 @@ def logout_view(request):
 	return redirect('accounts:login')
 
 def seller_signup_view(request):
-	form = StripeConnectSetupForm()
+	obj = CustomUser.objects.get(email=request.user.email)
+	data = {'email': obj.email, 'first_name': obj.first_name, 'last_name': obj.last_name}
+	form = StripeConnectSetupForm(initial=data)
 	if request.method == 'POST':
 		form = StripeConnectSetupForm(request.POST, request.FILES)
 		if form.is_valid() and form.cleaned_data['accept_TOS']:
@@ -109,6 +111,7 @@ def seller_signup_view(request):
 
 			obj = CustomUser.objects.get(email=request.user.email)
 			obj.stripe_seller_id = account.id
+			obj.stripe_seller_TOS_accepted = True
 			obj.is_seller = True
 			obj.save()
 
@@ -123,7 +126,9 @@ def settings_view(request):
 	return render(request, 'accounts/settings.html')
 
 def update_user_view(request):
-	form = CustomUserChangeForm()
+	obj = CustomUser.objects.get(email=request.user.email)
+	data = {'email': obj.email, 'first_name': obj.first_name, 'last_name': obj.last_name}
+	form = CustomUserChangeForm(initial=data)
 	if request.method == 'POST':
 		form = CustomUserChangeForm(request.POST, request.FILES)
 		if form.is_valid():
