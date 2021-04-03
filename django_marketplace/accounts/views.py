@@ -102,7 +102,16 @@ def seller_signup_view(request):
 					},
 				},
 				business_profile={
-					'mcc': '4225'
+					'mcc': '4225',
+					'url': 'djangomarket.com'
+				},
+				external_account = {
+					'object': 'bank_account',
+					'country': form.cleaned_data['country'],
+					'currency': 'GBP',
+					'account_holder_name': form.cleaned_data['first_name'] + form.cleaned_data['last_name'],
+					'routing_number': form.cleaned_data['payout_sort_code'] ,
+					'account_number': form.cleaned_data['payout_account_number'] ,
 				},
 				tos_acceptance={
 					'date': int(time.time()),

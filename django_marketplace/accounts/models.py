@@ -65,6 +65,8 @@ class StripeConnectSetup(models.Model):
 	identity_document_front = models.ImageField(upload_to='images',blank=True)
 	identity_document_back = models.ImageField(upload_to='images',blank=True)
 	additional_ID = models.ImageField(upload_to='images',blank=True)
+	payout_sort_code = models.CharField(max_length=6)
+	payout_account_number = models.CharField(max_length=8)
 	accept_TOS = models.BooleanField()
 	
 	
