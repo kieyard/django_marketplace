@@ -135,25 +135,19 @@ def seller_signup_view(request):
 def settings_view(request):
 	return render(request, 'accounts/settings.html')
 
+
 def update_user_view(request):
-	obj = CustomUser.objects.get(email=request.user.email)
-	data = {'email': obj.email, 'first_name': obj.first_name, 'last_name': obj.last_name}
-	form = CustomUserChangeForm(initial=data)
-	if request.method == 'POST':
-		form = CustomUserChangeForm(request.POST, request.FILES)
-		if form.is_valid():
-			obj = CustomUser.objects.get(email=request.user.email)
-			obj.email = form.cleaned_data['email']
-			obj.first_name = form.cleaned_data['first_name']
-			obj.last_name = form.cleaned_data['last_name']
-			obj.save()
-			return redirect('accounts:update_user')
-
-	context = {
-		'form': form
-	}
-	return render(request, 'accounts/update_user.html', context)
-
+    obj = CustomUser.objects.get(email=request.user.email)
+    form = CustomUserChangeForm(instance=obj)
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, request.FILES, instance=obj)
+        if form.is_valid():
+            obj = form.save()
+            return redirect('accounts:update_user')
+    context = {
+        'form': form
+    }
+    return render(request, 'accounts/update_user.html', context)
 
 
 def change_password(request):

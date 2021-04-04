@@ -13,9 +13,7 @@ class CustomUserChangeForm(UserChangeForm):
 	class Meta:
 		model = CustomUser
 		fields = ('email','first_name', 'last_name')
-		extra_kwargs = {'email': {'validators': []},}
-	def clean(self):
-		pass
+
 
 class StripeConnectSetupForm(forms.ModelForm):
 	class Meta:
