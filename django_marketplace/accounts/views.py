@@ -166,5 +166,18 @@ def change_password(request):
         'form': form
     })
 
+def payment_card_view(request):
+	cards = stripe.Customer.list_sources(request.user.stripe_customer_id,
+		object="card",
+		limit=3,
+		)
 
+	context = {
+		'cards': cards.data
+	}
+
+	return render(request, 'accounts/payment_card.html', context)
+# for i in range(len(cards)):
+# 	print(str(cards.data[i].brand) + ' ending in: ' + str(cards.data[i].last4))
+# 	print('expires: ' + str(cards.data[i].exp_month) + '/' + str(cards.data[i].exp_year))
 

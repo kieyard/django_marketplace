@@ -1,0 +1,15 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h1>Select a card</h1>
+<hr>
+
+{% for i in cards %}
+	<button>
+	 	{{ i.brand }} ending in {{ i.last4 }}
+	 	<br>
+	 	Expires: {{ i.exp_month }} / {{ i.exp_year }}
+ 	</button>
+ 	<br>
+
+{% endfor %}
+{% endblock %}
