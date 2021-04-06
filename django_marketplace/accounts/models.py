@@ -69,5 +69,10 @@ class StripeConnectSetup(models.Model):
 	payout_account_number = models.CharField(max_length=8)
 	accept_TOS = models.BooleanField()
 	
-	
+class AddCardSetup(models.Model):
+	card_holders_fullname = models.CharField(max_length=80)
+	card_number = models.CharField(max_length=16)
+	exp_month = models.IntegerField()
+	exp_year = models.IntegerField()
+	cvc = models.IntegerField()
 

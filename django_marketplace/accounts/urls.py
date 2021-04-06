@@ -11,5 +11,6 @@ urlpatterns = [
     path('settings/', views.settings_view, name = 'settings'),
     path('update_user/', views.update_user_view, name='update_user'),
     path('password/', views.change_password, name='change_password'),
-    path('payment_card/', views.payment_card_view, name='payment_card')
+    path('payment_card/', views.payment_card_view, name='payment_card'),
+    path('add_card/', views.add_card_view, name='add_card')
 ]

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm, CustomUserChangeForm, StripeConnectSetupForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, StripeConnectSetupForm, AddCardSetupForm
 from .models import CustomUser
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
@@ -70,8 +70,8 @@ def seller_signup_view(request):
 				country=form.cleaned_data['country'],
 				email=form.cleaned_data['email'],
 				capabilities={
-			    	"card_payments": {"requested": True},
-			    	"transfers": {"requested": True},
+					"card_payments": {"requested": True},
+					"transfers": {"requested": True},
 				},
 				business_type='individual',
 				individual = {
@@ -84,8 +84,8 @@ def seller_signup_view(request):
 					},
 					"dob":{
 						"day": form.cleaned_data['DOB'].day,
-					 	"month": form.cleaned_data['DOB'].month,
-					 	"year":form.cleaned_data['DOB'].year
+						"month": form.cleaned_data['DOB'].month,
+						"year":form.cleaned_data['DOB'].year
 					},
 					"email": form.cleaned_data['email'],
 					"first_name":form.cleaned_data['first_name'],
@@ -137,47 +137,74 @@ def settings_view(request):
 
 
 def update_user_view(request):
-    obj = CustomUser.objects.get(email=request.user.email)
-    form = CustomUserChangeForm(instance=obj)
-    if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST, request.FILES, instance=obj)
-        if form.is_valid():
-            obj = form.save()
-            return redirect('accounts:update_user')
-    context = {
-        'form': form
-    }
-    return render(request, 'accounts/update_user.html', context)
+	obj = CustomUser.objects.get(email=request.user.email)
+	form = CustomUserChangeForm(instance=obj)
+	if request.method == 'POST':
+		form = CustomUserChangeForm(request.POST, request.FILES, instance=obj)
+		if form.is_valid():
+			obj = form.save()
+			return redirect('accounts:update_user')
+	context = {
+		'form': form
+	}
+	return render(request, 'accounts/update_user.html', context)
 
 
 def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('accounts:change_password')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/change_password.html', {
-        'form': form
-    })
+	if request.method == 'POST':
+		form = PasswordChangeForm(request.user, request.POST)
+		if form.is_valid():
+			user = form.save()
+			update_session_auth_hash(request, user)  # Important!
+			messages.success(request, 'Your password was successfully updated!')
+			return redirect('accounts:change_password')
+		else:
+			messages.error(request, 'Please correct the error below.')
+	else:
+		form = PasswordChangeForm(request.user)
+	return render(request, 'accounts/change_password.html', {
+		'form': form
+	})
 
 def payment_card_view(request):
-	cards = stripe.Customer.list_sources(request.user.stripe_customer_id,
-		object="card",
-		limit=3,
-		)
+	cards = stripe.PaymentMethod.list(
+		customer = request.user.stripe_customer_id,
+		type="card",
+	)
 
 	context = {
 		'cards': cards.data
 	}
 
 	return render(request, 'accounts/payment_card.html', context)
-# for i in range(len(cards)):
-# 	print(str(cards.data[i].brand) + ' ending in: ' + str(cards.data[i].last4))
-# 	print('expires: ' + str(cards.data[i].exp_month) + '/' + str(cards.data[i].exp_year))
 
+def add_card_view(request):
+	form = AddCardSetupForm()
+	if request.method == 'POST':
+		form = AddCardSetupForm(request.POST, request.FILES)
+		if form.is_valid():
+			tok = stripe.Token.create(
+				card={
+					'number' : form.cleaned_data['card_number'],
+					'exp_month' : form.cleaned_data['exp_month'],
+					'exp_year' : form.cleaned_data['exp_year'],
+					'cvc' : form.cleaned_data['cvc'],
+				},
+			)
+			
+			pm = stripe.PaymentMethod.create(
+				type="card",
+				card={'token':tok.id},
+			)
+			
+			stripe.PaymentMethod.attach(
+				pm.id,
+				customer=request.user.stripe_customer_id,
+			)
+			return redirect('accounts:payment_card')
+
+	context = {
+		'form' : form
+	}
+
+	return render(request, 'accounts/add_card.html', context)

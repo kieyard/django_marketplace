@@ -5,11 +5,13 @@
 
 {% for i in cards %}
 	<button>
-	 	{{ i.brand }} ending in {{ i.last4 }}
+	 	{{ i.card.brand }} ending in {{ i.card.last4 }}
 	 	<br>
-	 	Expires: {{ i.exp_month }} / {{ i.exp_year }}
+	 	Expires: {{ i.card.exp_month }} / {{ i.card.exp_year }}
  	</button>
  	<br>
 
 {% endfor %}
+<br>
+<a href="{% url 'accounts:add_card' %}">Add card</a>
 {% endblock %}
