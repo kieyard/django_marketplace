@@ -6,6 +6,12 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 
+from products.models import Product
+
+class ProductInLine(admin.TabularInline):
+	model = Product
+	extra = 3
+
 class CustomUserAdmin(UserAdmin):
 	add_form = CustomUserCreationForm
 	form = CustomUserChangeForm
@@ -17,7 +23,7 @@ class CustomUserAdmin(UserAdmin):
 		('Stripe', {'fields':('stripe_customer_id', 'stripe_seller_id','stripe_seller_TOS_accepted',)}),
 		('Permissions', {'fields': ( 'is_buyer', 'is_seller', 'is_staff', 'is_active')}),
 	)
-
+	inlines = [ProductInLine]
 	add_fieldsets = (
 		(None, {
 			'classes': ('wide', ),
