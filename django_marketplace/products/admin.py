@@ -8,6 +8,6 @@ class ProductAdmin(admin.ModelAdmin):
 	model = Product
 	list_display = ('title','description','price')
 	fieldsets = (
-		(None, {'fields':('title','image','description','price','summary','featured')}),)
+		(None, {'fields':('title','image','description','price','summary','featured', 'listedBy')}),) 
 
 admin.site.register(Product, ProductAdmin)

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1>{{object.title}}</h1>
+
+{% if object.image %}
+<img src="{{ object.image.url }}"> 
+{% endif %}
+
+<p>description: {{object.description}}</p>
+<p>price: £{{object.price}}</p>
+<p>summary: {{object.summary}}</p>
+<p>is featured: {{object.featured}}</p>
+
+
+{% if isMyProduct %}
+	<a href="{{ object.get_absolute_url }}update_product"> <button>Edit</button></a>
+	<a href="{{ object.get_absolute_url }}delete_product"> <button>Delete</button></a>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,16 @@
+.listing{
+	position: relative;
+	background-color: lightgrey; 
+	border: 5px solid darkgrey; 
+	margin-top: 15px; 
+	padding: 10px;
+	height: 150px;
+	left:25%;
+	width: 50%;
+	text-align: left;
+}
+
+img{
+	max-height: 150px;
+	float: left
+}

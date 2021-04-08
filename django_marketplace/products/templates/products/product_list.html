@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+
+<form method='GET' action='.'>
+	search for product: <input type="search" name="title_search">
+	<button type="submit"> search </button>
+</form>
+
+{% for instance in object_list %}
+
+<div class="listing">
+<a href='{{ instance.get_absolute_url }}' > {{ instance.title }} </a>
+
+{% if instance.image %}
+<img src="{{ instance.image.url }}"> 
+{% endif %}
+
+<p> Description: {{ instance.description }} </p>
+<p> Price: {{ instance.price }} </p>
+<p> Listed By: {{ instance.listedBy }}</p>
+</div>
+
+{% endfor %}
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content%}
+{% if isMyProduct %}
+	<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+		{{form.as_p}}
+		<button type="submit" class="btn btn-primary">Update</button>
+
+	</form>
+
+{% else %}
+	<p>you dont have permision to be here</p>
+{% endif %}
+
+{% endblock %}
