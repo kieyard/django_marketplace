@@ -22,8 +22,17 @@ class Product(models.Model):
 		return self.title
 
 	def get_absolute_url(self):
-		return reverse('products:product_detail', kwargs={'id': self.id})
+		return reverse('products:product_detail', kwargs={'item_id': self.item_id})
 
 	def save(self):
-		self.item_id = random.randint(100000,999999)
+		new_id = random.randint(1000000000,9999999999)
+		while True:
+			try:
+				test_unique_id = Product.objects.get(item_id=new_id)
+			except Product.DoesNotExist:
+				self.item_id = new_id
+				break
+			else:
+				new_id = random.randint(1000000000,9999999999)
+				continue
 		super(Product, self).save()

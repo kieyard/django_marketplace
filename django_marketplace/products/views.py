@@ -13,8 +13,8 @@ def my_products_view(request, *args, **kwargs):
 	return render(request, 'products/product_list.html', context)
 
 
-def delete_product_view(request, id, *args, **kwargs):
-	obj = get_object_or_404(Product, id = id)
+def delete_product_view(request, item_id, *args, **kwargs):
+	obj = get_object_or_404(Product, item_id = item_id)
 	if request.method == 'POST':
 		obj.delete()
 		return redirect('products:my_products')
@@ -25,8 +25,8 @@ def delete_product_view(request, id, *args, **kwargs):
 	}
 	return render(request, 'products/product_delete.html', context)
 
-def update_product_view(request, id, *args, **kwargs):
-	obj = get_object_or_404(Product, id = id)
+def update_product_view(request, item_id, *args, **kwargs):
+	obj = get_object_or_404(Product, item_id = item_id)
 	form = ProductForm(request.POST or None, instance = obj)
 	if request.method == 'POST':
 		form = ProductForm(request.POST, request.FILES, instance = obj)
@@ -67,8 +67,8 @@ def create_product_view(request, *args, **kwargs):
 	return render(request, 'products/create_product.html', context)
 
 
-def product_detail_view(request, id, *args, **kwargs):
-	obj = get_object_or_404(Product, id = id)
+def product_detail_view(request, item_id, *args, **kwargs):
+	obj = get_object_or_404(Product, item_id = item_id)
 	isMyProduct = str(obj.listedBy) == str(request.user)
 	context = {
 	'object' : obj,
