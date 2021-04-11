@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ProductForm
-from .models import Product
+from .models import Product, Basket, AddToBasket
 
 # Create your views here.
 def my_products_view(request, *args, **kwargs):
@@ -75,3 +75,11 @@ def product_detail_view(request, item_id, *args, **kwargs):
 	'isMyProduct' : isMyProduct
 	}
 	return render(request, 'products/product_detail.html', context)
+
+
+def add_to_basket(request, item_id, quantity=1):
+	my_basket, created = Basket.objects.get_or_create(user=request.user)
+	obj = get_object_or_404(Product, item_id = item_id)
+	entry = AddToBasket.objects.create(user = request.user, product=obj, basket=my_basket, quantity=quantity)
+	my_basket.save()
+	return redirect('products:product_detail', item_id = item_id)

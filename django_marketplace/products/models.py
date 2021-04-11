@@ -3,6 +3,7 @@ from django.urls import reverse
 from accounts.models import CustomUser
 
 from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 import random
 
@@ -36,3 +37,20 @@ class Product(models.Model):
 				new_id = random.randint(1000000000,9999999999)
 				continue
 		super(Product, self).save()
+
+class Basket(models.Model):
+	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
+	item_count = models.IntegerField(default=0)
+	total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+
+class AddToBasket(models.Model):
+	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
+	product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
+	basket = models.ForeignKey(Basket, null = True, on_delete=models.CASCADE)
+	quantity = models.IntegerField()
+
+@receiver(post_save, sender=AddToBasket)
+def update_basket(sender, instance, **kwargs):
+	entry_cost = instance.quantity * instance.product.price
+	instance.basket.total += entry_cost
+	instance.basket.item_count += instance.quantity

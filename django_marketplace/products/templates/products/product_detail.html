@@ -12,6 +12,7 @@
 <p>price: £{{object.price}}</p>
 <p>summary: {{object.summary}}</p>
 <p>is featured: {{object.featured}}</p>
+<a href="{{ object.get_absolute_url }}add_to_basket"> <button>add to basket</button></a>
 
 
 {% if isMyProduct %}
