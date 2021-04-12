@@ -82,4 +82,13 @@ def add_to_basket(request, item_id, quantity=1):
 	obj = get_object_or_404(Product, item_id = item_id)
 	entry = AddToBasket.objects.create(user = request.user, product=obj, basket=my_basket, quantity=quantity)
 	my_basket.save()
-	return redirect('products:product_detail', item_id = item_id)
+	return redirect('products:basket')
+
+def basket_view(request):
+	basketItems = AddToBasket.objects.filter(user__exact=request.user)
+	basket = get_object_or_404(Basket, user=request.user)
+	context={
+	'items' : basketItems,
+	'basket': basket
+	}
+	return render(request, 'products/basket.html', context)
