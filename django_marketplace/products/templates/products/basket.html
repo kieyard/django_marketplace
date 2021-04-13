@@ -13,13 +13,16 @@
 
 <p> Description: {{ item.product.description }} </p>
 <p> Price: {{ item.product.price }} </p>
+<p> Quantity: {{ item.quantity }}</p>
+	<a href="{% url 'products:delete_add_to_basket_entry'  item.id %}"> <button>remove</button></a>
 </div>
 <hr>
 
 {% endfor %}
 
 <div>
-	<p> Basket Total: {{ basket.total }} </p>
+	<p> {{ basket.item_count }} items in basket</p>
+	<p> Total: {{ basket.total }} </p>
 </div>
 
 {% endblock %}

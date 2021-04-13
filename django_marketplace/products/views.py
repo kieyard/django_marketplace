@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import ProductForm
+from .forms import ProductForm, AddToBasketForm
 from .models import Product, Basket, AddToBasket
 
 # Create your views here.
@@ -70,17 +70,35 @@ def create_product_view(request, *args, **kwargs):
 def product_detail_view(request, item_id, *args, **kwargs):
 	obj = get_object_or_404(Product, item_id = item_id)
 	isMyProduct = str(obj.listedBy) == str(request.user)
+	form = AddToBasketForm()
+	if request.method == 'POST':
+		form = AddToBasketForm(request.POST, request.FILES)
+		if form.is_valid():
+			quantity = request.POST['quantity']
+			return redirect('products:add_to_basket', item_id, quantity)
 	context = {
 	'object' : obj,
-	'isMyProduct' : isMyProduct
+	'isMyProduct' : isMyProduct,
+	'form' : form
 	}
 	return render(request, 'products/product_detail.html', context)
 
 
-def add_to_basket(request, item_id, quantity=1):
+def add_to_basket(request, item_id, quantity):
 	my_basket, created = Basket.objects.get_or_create(user=request.user)
 	obj = get_object_or_404(Product, item_id = item_id)
 	entry = AddToBasket.objects.create(user = request.user, product=obj, basket=my_basket, quantity=quantity)
+	my_basket.total += entry.quantity * entry.product.price
+	my_basket.item_count += entry.quantity
+	my_basket.save()
+	return redirect('products:basket')
+
+def delete_add_to_basket_entry(request, id):
+	my_basket = get_object_or_404(Basket, user=request.user)
+	query = get_object_or_404(AddToBasket, id = id)
+	my_basket.total -= query.quantity * query.product.price
+	my_basket.item_count -= query.quantity
+	query.delete()
 	my_basket.save()
 	return redirect('products:basket')
 

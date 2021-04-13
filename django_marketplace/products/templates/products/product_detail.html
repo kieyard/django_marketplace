@@ -12,7 +12,15 @@
 <p>price: £{{object.price}}</p>
 <p>summary: {{object.summary}}</p>
 <p>is featured: {{object.featured}}</p>
-<a href="{{ object.get_absolute_url }}add_to_basket"> <button>add to basket</button></a>
+
+<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+	{{form}}
+	<button type="submit">add to basket</button>
+
+</form>
+	
+<br>
+
 
 
 {% if isMyProduct %}

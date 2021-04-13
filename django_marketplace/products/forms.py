@@ -6,3 +6,6 @@ class ProductForm(forms.ModelForm):
 	class Meta:
 		model = Product
 		exclude = ['listedBy', 'item_id']
+
+class AddToBasketForm(forms.Form):
+	quantity = forms.IntegerField()
