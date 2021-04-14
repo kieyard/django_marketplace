@@ -70,7 +70,7 @@ def create_product_view(request, *args, **kwargs):
 def product_detail_view(request, item_id, *args, **kwargs):
 	obj = get_object_or_404(Product, item_id = item_id)
 	isMyProduct = str(obj.listedBy) == str(request.user)
-	form = AddToBasketForm()
+	form = AddToBasketForm(initial={'quantity': 1,})
 	if request.method == 'POST':
 		form = AddToBasketForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -84,7 +84,7 @@ def product_detail_view(request, item_id, *args, **kwargs):
 	return render(request, 'products/product_detail.html', context)
 
 
-def add_to_basket(request, item_id, quantity):
+def add_to_basket(request, item_id, quantity=1):
 	my_basket, created = Basket.objects.get_or_create(user=request.user)
 	obj = get_object_or_404(Product, item_id = item_id)
 	entry = AddToBasket.objects.create(user = request.user, product=obj, basket=my_basket, quantity=quantity)

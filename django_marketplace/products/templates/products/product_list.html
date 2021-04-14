@@ -20,6 +20,7 @@
 <p> Description: {{ instance.description }} </p>
 <p> Price: {{ instance.price }} </p>
 <p> Listed By: {{ instance.listedBy }}</p>
+<p>{{ instance.quantity }} avaliable <a href="{% url 'products:add_to_basket' instance.item_id 1 %}"><button>Add To Basket</button></a></p>
 </div>
 
 {% endfor %}
