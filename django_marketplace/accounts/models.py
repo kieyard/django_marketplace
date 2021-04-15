@@ -48,6 +48,14 @@ def post_save_create(sender, instance, created, *args, **kwargs):
 post_save.connect(post_save_create, sender=settings.AUTH_USER_MODEL)
 
 
+class DeliveryAddress(models.Model):
+	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
+	first_name = models.CharField(max_length=40, null = True)
+	last_name = models.CharField(max_length=40, null = True)
+	address_line_1 = models.CharField(max_length=100, null = True)
+	address_line_2 = models.CharField(max_length=100, null = True)
+	city = models.CharField(max_length=100, null = True)
+	postal_code = models.CharField(max_length=7, null = True)
 
 class StripeConnectSetup(models.Model):
 	first_name = models.CharField(max_length=40)

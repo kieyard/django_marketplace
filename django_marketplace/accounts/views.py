@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm, CustomUserChangeForm, StripeConnectSetupForm, AddCardSetupForm
-from .models import CustomUser
+from .forms import CustomUserCreationForm, CustomUserChangeForm, StripeConnectSetupForm, AddCardSetupForm, AddDeliveryAddressForm
+from .models import CustomUser, DeliveryAddress
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib import messages
@@ -208,3 +208,24 @@ def add_card_view(request):
 	}
 
 	return render(request, 'accounts/add_card.html', context)
+
+def add_delivery_address_view(request):
+	form = AddDeliveryAddressForm()
+	if request.method == 'POST':
+		form = AddDeliveryAddressForm(request.POST, request.FILES)
+		form.instance.user = request.user
+		if form.is_valid():
+			form.save()
+			return redirect('accounts:delivery_addresses')
+
+	context = {
+		'form' : form
+	}
+	return render(request, 'accounts/add_delivery_address.html', context)
+
+def delivery_addresses_view(request):
+	queryset = DeliveryAddress.objects.all()
+	context = {
+		'addresses' : queryset
+	}
+	return render(request, 'accounts/delivery_addresses.html', context)
