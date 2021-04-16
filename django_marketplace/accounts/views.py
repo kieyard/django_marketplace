@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm, CustomUserChangeForm, StripeConnectSetupForm, AddCardSetupForm, AddDeliveryAddressForm
-from .models import CustomUser, DeliveryAddress
+from .models import CustomUser, DeliveryAddress, Cards
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib import messages
@@ -201,6 +201,7 @@ def add_card_view(request):
 				pm.id,
 				customer=request.user.stripe_customer_id,
 			)
+			Cards.objects.get_or_create(user=request.user, card_id=pm.id)
 			return redirect('accounts:payment_card')
 
 	context = {

@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import ProductForm, AddToBasketForm
-from .models import Product, Basket, AddToBasket
+from .forms import ProductForm, AddToBasketForm, OrderForm
+from .models import Product, Basket, AddToBasket, Order
+from accounts.models import DeliveryAddress, Cards
 
 # Create your views here.
 def my_products_view(request, *args, **kwargs):
@@ -110,3 +111,21 @@ def basket_view(request):
 	'basket': basket
 	}
 	return render(request, 'products/basket.html', context)
+
+def create_order_view(request):
+	form = OrderForm()
+	form.fields['delivery_address'].queryset = DeliveryAddress.objects.filter(user=request.user)
+	form.fields['card'].queryset = Cards.objects.filter(user=request.user)
+	if request.method == 'POST':
+		form = OrderForm(request.POST, request.FILES)
+		form.instance.user = request.user
+		form.fields['delivery_address'].queryset = DeliveryAddress.objects.filter(user=request.user)
+		form.fields['card'].queryset = Cards.objects.filter(user=request.user)
+		if form.is_valid():
+			form.save()
+			return redirect('products:product_list')
+
+	context = {
+		'form' : form
+	}
+	return render(request, 'products/create_order.html', context)

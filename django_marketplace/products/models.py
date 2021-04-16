@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Cards, DeliveryAddress
 
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
@@ -49,6 +49,25 @@ class AddToBasket(models.Model):
 	product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
 	basket = models.ForeignKey(Basket, null = True, on_delete=models.CASCADE)
 	quantity = models.PositiveIntegerField()
+
+class Order(models.Model):
+	order_id = models.IntegerField(unique=True)
+	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
+	delivery_address = models.ForeignKey(DeliveryAddress, null=True, blank=True, on_delete=models.CASCADE)
+	card = models.ForeignKey(Cards, null=True, blank=True, on_delete=models.CASCADE)
+
+	def save(self):
+		new_id = random.randint(1000000000,9999999999)
+		while True:
+			try:
+				test_unique_id = Order.objects.get(order_id=new_id)
+			except Order.DoesNotExist:
+				self.order_id = new_id
+				break
+			else:
+				new_id = random.randint(1000000000,9999999999)
+				continue
+		super(Order, self).save()
 
 
 
