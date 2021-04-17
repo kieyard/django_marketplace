@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Product, Basket, AddToBasket
+from .models import Product, Basket, AddToBasket, Order, OrderItem
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -31,3 +31,21 @@ class BasketAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Basket, BasketAdmin)
+
+
+
+class OrderItemInLine(admin.TabularInline):
+	model = OrderItem
+	extra = 0
+
+
+class OrderAdmin(admin.ModelAdmin):
+	model = Order
+	list_display = ('order_id',)
+	fieldsets = (
+		(None, {'fields':('order_id', 'user', 'delivery_address', 'card')}),)
+	inlines = [OrderItemInLine]
+
+
+
+admin.site.register(Order, OrderAdmin)

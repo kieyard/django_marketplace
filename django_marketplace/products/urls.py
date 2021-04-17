@@ -13,5 +13,6 @@ urlpatterns = [
     path('<int:item_id>/<int:quantity>/add_to_basket/', views.add_to_basket, name= 'add_to_basket'),
     path('basket/', views.basket_view, name='basket'),
     path('<int:id>/delete_add_to_basket_entry/', views.delete_add_to_basket_entry, name='delete_add_to_basket_entry'),
-    path('create_order/', views.create_order_view, name='create_order')
+    path('create_order/', views.create_order_view, name='create_order'),
+    path('<int:order_id>/create_order_and_order_items/', views.create_order_and_order_items, name='create_order_and_order_items')
 ]

@@ -45,7 +45,6 @@ class Basket(models.Model):
 	total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 
 class AddToBasket(models.Model):
-	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
 	product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
 	basket = models.ForeignKey(Basket, null = True, on_delete=models.CASCADE)
 	quantity = models.PositiveIntegerField()
@@ -68,6 +67,15 @@ class Order(models.Model):
 				new_id = random.randint(1000000000,9999999999)
 				continue
 		super(Order, self).save()
+
+class OrderItem(models.Model):
+ 	order_id = models.ForeignKey(Order, null=True, blank=True, on_delete=models.CASCADE)
+ 	product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
+ 	quantity = models.PositiveIntegerField()
+ 	paid_status = models.BooleanField(default=False)
+
+
+
 
 
 

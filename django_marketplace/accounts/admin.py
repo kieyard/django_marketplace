@@ -19,18 +19,18 @@ class CardsInline(admin.TabularInline):
 class ProductInLine(admin.TabularInline):
 	model = Product
 	extra = 1
+	show_change_link = True
 
 class BasketInLine(admin.TabularInline):
 	model = Basket
 	extra = 0
+	show_change_link = True
 
-class AddToBasketInLine(admin.TabularInline):
-	model = AddToBasket
-	extra = 0
 
 class OrderInLine(admin.TabularInline):
 	model = Order
 	extra = 0
+	show_change_link = True
 
 class CustomUserAdmin(UserAdmin):
 	add_form = CustomUserCreationForm
@@ -43,7 +43,7 @@ class CustomUserAdmin(UserAdmin):
 		('Stripe', {'fields':('stripe_customer_id', 'stripe_seller_id','stripe_seller_TOS_accepted',)}),
 		('Permissions', {'fields': ( 'is_buyer', 'is_seller', 'is_staff', 'is_active')}),
 	)
-	inlines = [CardsInline, DeliveryAddressesInLine, OrderInLine, ProductInLine, BasketInLine, AddToBasketInLine]
+	inlines = [CardsInline, DeliveryAddressesInLine, OrderInLine, ProductInLine, BasketInLine]
 	add_fieldsets = (
 		(None, {
 			'classes': ('wide', ),

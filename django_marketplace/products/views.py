@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ProductForm, AddToBasketForm, OrderForm
-from .models import Product, Basket, AddToBasket, Order
+from .models import Product, Basket, AddToBasket, Order, OrderItem
 from accounts.models import DeliveryAddress, Cards
 
 # Create your views here.
@@ -88,7 +88,7 @@ def product_detail_view(request, item_id, *args, **kwargs):
 def add_to_basket(request, item_id, quantity=1):
 	my_basket, created = Basket.objects.get_or_create(user=request.user)
 	obj = get_object_or_404(Product, item_id = item_id)
-	entry = AddToBasket.objects.create(user = request.user, product=obj, basket=my_basket, quantity=quantity)
+	entry = AddToBasket.objects.create(product=obj, basket=my_basket, quantity=quantity)
 	my_basket.total += entry.quantity * entry.product.price
 	my_basket.item_count += entry.quantity
 	my_basket.save()
@@ -104,7 +104,7 @@ def delete_add_to_basket_entry(request, id):
 	return redirect('products:basket')
 
 def basket_view(request):
-	basketItems = AddToBasket.objects.filter(user__exact=request.user)
+	basketItems = AddToBasket.objects.filter(basket__user__exact=request.user)
 	basket = get_object_or_404(Basket, user=request.user)
 	context={
 	'items' : basketItems,
@@ -123,9 +123,20 @@ def create_order_view(request):
 		form.fields['card'].queryset = Cards.objects.filter(user=request.user)
 		if form.is_valid():
 			form.save()
-			return redirect('products:product_list')
+			order_id=form.instance.order_id
+			return redirect('products:create_order_and_order_items', order_id)
 
 	context = {
 		'form' : form
 	}
 	return render(request, 'products/create_order.html', context)
+
+def create_order_and_order_items(request, order_id):
+	basketItems = AddToBasket.objects.filter(basket__user__exact=request.user)
+	for item in basketItems:
+		order = get_object_or_404(Order, order_id=order_id)
+		order_item, created = OrderItem.objects.get_or_create(order_id=order, product=item.product, quantity=item.quantity)
+
+	return redirect('products:product_list')
+
+
