@@ -113,6 +113,8 @@ def basket_view(request):
 	return render(request, 'products/basket.html', context)
 
 def create_order_view(request):
+	basketItems = AddToBasket.objects.filter(basket__user__exact=request.user)
+	basket = get_object_or_404(Basket, user=request.user)
 	form = OrderForm()
 	form.fields['delivery_address'].queryset = DeliveryAddress.objects.filter(user=request.user)
 	form.fields['card'].queryset = Cards.objects.filter(user=request.user)
@@ -127,7 +129,9 @@ def create_order_view(request):
 			return redirect('products:create_order_and_order_items', order_id)
 
 	context = {
-		'form' : form
+		'form' : form,
+		'items' : basketItems,
+		'basket': basket
 	}
 	return render(request, 'products/create_order.html', context)
 
@@ -137,6 +141,19 @@ def create_order_and_order_items(request, order_id):
 		order = get_object_or_404(Order, order_id=order_id)
 		order_item, created = OrderItem.objects.get_or_create(order_id=order, product=item.product, quantity=item.quantity)
 
-	return redirect('products:product_list')
+	return redirect('products:view_order', order_id=order_id)
+
+
+def view_order_view(request, order_id):
+	order = get_object_or_404(Order, order_id__exact=order_id)
+	order_items = OrderItem.objects.filter(order_id=order)
+
+	context={
+	'order': order,
+	'order_items' : order_items,
+	
+	}
+	return render(request, 'products/view_order.html', context)
+
 
 

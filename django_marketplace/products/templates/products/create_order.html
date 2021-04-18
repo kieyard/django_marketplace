@@ -7,7 +7,34 @@
 
 <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
 	{{form.as_p}}
+
+
+	{% for item in items %}
+
+	<div class="basket">
+		<a href='{{ item.product.get_absolute_url }}' > {{ item.product.title }} </a>
+
+		{% if item.product.image %}
+			<img src="{{ item.product.image.url }}"> 
+		{% endif %}
+
+		<p> Description: {{ item.product.description }} </p>
+		<p> Price: {{ item.product.price }} </p>
+		<p> Quantity: {{ item.quantity }}</p>
+	</div>
+	
+	<hr>
+
+	{% endfor %}
+
+	<div>
+		<p> {{ basket.item_count }} items in basket</p>
+		<p> Total: {{ basket.total }} </p>
+	</div>
+
+
 	<button type="submit" class="btn btn-primary">Save</button>
 
 </form>
+
 {% endblock %}
