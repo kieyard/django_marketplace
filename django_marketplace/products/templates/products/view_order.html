@@ -3,8 +3,8 @@
 {% block content %}
 
 <p>Order: {{ order.order_id }}</p>
-<p>Delivered to: {{ order.delivery_address.address_line_1 }} {{ order.delivery_address.postal_code }}</p>
-<p>Paid Via: {{ order.card.card_id}}</p>
+<p>Delivered to: {{ order.delivery_address}} </p>
+<p>Paid Via: {{ order.card }} </p>
 
 {% for item in order_items %}
 

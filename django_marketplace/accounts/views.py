@@ -166,17 +166,6 @@ def change_password(request):
 		'form': form
 	})
 
-def payment_card_view(request):
-	cards = stripe.PaymentMethod.list(
-		customer = request.user.stripe_customer_id,
-		type="card",
-	)
-
-	context = {
-		'cards': cards.data
-	}
-
-	return render(request, 'accounts/payment_card.html', context)
 
 def add_card_view(request):
 	form = AddCardSetupForm()
@@ -201,7 +190,7 @@ def add_card_view(request):
 				pm.id,
 				customer=request.user.stripe_customer_id,
 			)
-			Cards.objects.get_or_create(user=request.user, card_id=pm.id)
+			Cards.objects.get_or_create(user=request.user, card_id=pm.id, last_4=pm.card.last4, brand=pm.card.brand)
 			return redirect('accounts:payment_card')
 
 	context = {
@@ -224,9 +213,3 @@ def add_delivery_address_view(request):
 	}
 	return render(request, 'accounts/add_delivery_address.html', context)
 
-def delivery_addresses_view(request):
-	queryset = DeliveryAddress.objects.all()
-	context = {
-		'addresses' : queryset
-	}
-	return render(request, 'accounts/delivery_addresses.html', context)

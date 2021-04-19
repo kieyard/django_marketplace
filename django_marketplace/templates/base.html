@@ -22,8 +22,6 @@
 				<li class="pull-right">logged in as: {{ request.user.first_name }} </li>
 				<li class="pull-right"><a href="{% url 'accounts:logout' %}">Logout</a></li>
 				<li class="pull-right"><a href="{% url 'accounts:seller_signup' %}">Become a Seller</a></li>
-				<li class="pull-right"><a href="{% url 'accounts:payment_card' %}">Select a card</a></li>
-				<li class="pull-right"><a href="{% url 'accounts:delivery_addresses' %}">Select Address</a></li>
 				<li class="pull-right"><a href="{% url 'products:create_product' %}">Create Product</a></li>
 			{% endif %}
 		</ol>

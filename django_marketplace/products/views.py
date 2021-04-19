@@ -136,10 +136,18 @@ def create_order_view(request):
 	return render(request, 'products/create_order.html', context)
 
 def create_order_and_order_items(request, order_id):
+	basket = get_object_or_404(Basket, user=request.user)
 	basketItems = AddToBasket.objects.filter(basket__user__exact=request.user)
 	for item in basketItems:
 		order = get_object_or_404(Order, order_id=order_id)
 		order_item, created = OrderItem.objects.get_or_create(order_id=order, product=item.product, quantity=item.quantity)
+
+	for item in basketItems:
+		item.delete()
+
+	basket.item_count = 0
+	basket.total = 0
+	basket.save()
 
 	return redirect('products:view_order', order_id=order_id)
 

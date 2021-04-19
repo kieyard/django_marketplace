@@ -50,9 +50,11 @@ post_save.connect(post_save_create, sender=settings.AUTH_USER_MODEL)
 class Cards(models.Model):
 	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
 	card_id = models.CharField(max_length=40, null=True)
+	last_4 = models.CharField(max_length=4, null=True)
+	brand = models.CharField(max_length=40)
 
 	def __str__(self):
-		return self.card_id
+		return (self.brand + ' - ' + self.last_4)
 
 class DeliveryAddress(models.Model):
 	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
@@ -64,7 +66,7 @@ class DeliveryAddress(models.Model):
 	postal_code = models.CharField(max_length=7, null = True)
 
 	def __str__(self):
-		return self.address_line_1
+		return self.first_name + ' ' + self.last_name + ' ' + self.address_line_1 + ' ' + self.address_line_2 + ' ' + self.city + ' ' + self.postal_code 
 
 class StripeConnectSetup(models.Model):
 	first_name = models.CharField(max_length=40)
