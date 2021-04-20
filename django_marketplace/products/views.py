@@ -88,11 +88,14 @@ def product_detail_view(request, item_id, *args, **kwargs):
 def add_to_basket(request, item_id, quantity=1):
 	my_basket, created = Basket.objects.get_or_create(user=request.user)
 	obj = get_object_or_404(Product, item_id = item_id)
-	entry = AddToBasket.objects.create(product=obj, basket=my_basket, quantity=quantity)
-	my_basket.total += entry.quantity * entry.product.price
-	my_basket.item_count += entry.quantity
-	my_basket.save()
-	return redirect('products:basket')
+	if (obj.quantity >= quantity):
+		entry = AddToBasket.objects.create(product=obj, basket=my_basket, quantity=quantity)
+		my_basket.total += entry.quantity * entry.product.price
+		my_basket.item_count += entry.quantity
+		my_basket.save()
+		return redirect('products:basket')
+	else:
+		return redirect('products:product_detail', item_id)
 
 def delete_add_to_basket_entry(request, id):
 	my_basket = get_object_or_404(Basket, user=request.user)
@@ -139,8 +142,20 @@ def create_order_and_order_items(request, order_id):
 	basket = get_object_or_404(Basket, user=request.user)
 	basketItems = AddToBasket.objects.filter(basket__user__exact=request.user)
 	for item in basketItems:
+		if (item.product.quantity >= item.quantity):
+			continue
+		else:
+			basket.item_count -= item.quantity
+			basket.total -= item.product.price * item.quantity
+			basket.save()
+			item.delete()
+			return redirect('products:basket')
+
+	for item in basketItems:
 		order = get_object_or_404(Order, order_id=order_id)
 		order_item, created = OrderItem.objects.get_or_create(order_id=order, product=item.product, quantity=item.quantity)
+		item.product.quantity -= item.quantity
+		item.product.save()
 
 	for item in basketItems:
 		item.delete()
