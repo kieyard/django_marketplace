@@ -6,7 +6,15 @@
 <hr>
 
 <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
-	{{form.as_p}}
+	{{form.delivery_address}}
+	<br>
+	<a href="{% url 'accounts:add_delivery_address' %}">+ delivery address</a>
+	<br>
+	{{form.card}}
+	<br>
+	<a href="{% url 'accounts:add_card' %}">+ card</a>
+	<br>
+
 
 
 	{% for item in items %}

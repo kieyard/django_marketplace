@@ -191,7 +191,7 @@ def add_card_view(request):
 				customer=request.user.stripe_customer_id,
 			)
 			Cards.objects.get_or_create(user=request.user, card_id=pm.id, last_4=pm.card.last4, brand=pm.card.brand)
-			return redirect('accounts:payment_card')
+			return redirect('accounts:settings')
 
 	context = {
 		'form' : form
@@ -206,7 +206,7 @@ def add_delivery_address_view(request):
 		form.instance.user = request.user
 		if form.is_valid():
 			form.save()
-			return redirect('accounts:delivery_addresses')
+			return redirect('accounts:settings')
 
 	context = {
 		'form' : form
