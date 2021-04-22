@@ -5,6 +5,7 @@
 <p>Order: {{ order.order_id }}</p>
 <p>Delivered to: {{ order.delivery_address}} </p>
 <p>Paid Via: {{ order.card }} </p>
+<p>Created: {{order.created }}</p>
 
 {% for item in order_items %}
 

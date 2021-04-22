@@ -12,6 +12,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">Home</a></li>
 			<li><a href="{% url 'products:product_list' %}">Products</a></li>
+			<li><a href="{% url 'products:order_list'%}">Orders</a></li>
 
 			{% if not request.user.is_authenticated %}
 				<li class='pull-right'><a href="{% url 'accounts:signup' %}">Sign Up</a></li>
@@ -21,8 +22,7 @@
 				<li class="pull-right"><a href="{% url 'accounts:settings' %}">Settings</a></li>
 				<li class="pull-right">logged in as: {{ request.user.first_name }} </li>
 				<li class="pull-right"><a href="{% url 'accounts:logout' %}">Logout</a></li>
-				<li class="pull-right"><a href="{% url 'accounts:seller_signup' %}">Become a Seller</a></li>
-				<li class="pull-right"><a href="{% url 'products:create_product' %}">Create Product</a></li>
+				<li class="pull-right"><a href="{% url 'accounts:seller_signup' %}">Sell</a></li>
 			{% endif %}
 		</ol>
 	</div>

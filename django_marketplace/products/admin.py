@@ -43,7 +43,7 @@ class OrderAdmin(admin.ModelAdmin):
 	model = Order
 	list_display = ('order_id',)
 	fieldsets = (
-		(None, {'fields':('order_id', 'user', 'delivery_address', 'card')}),)
+		(None, {'fields':('order_id', 'user', 'delivery_address', 'card', 'item_count', 'total')}),)
 	inlines = [OrderItemInLine]
 
 

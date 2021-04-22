@@ -54,6 +54,9 @@ class Order(models.Model):
 	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
 	delivery_address = models.ForeignKey(DeliveryAddress, null=True, blank=True, on_delete=models.CASCADE)
 	card = models.ForeignKey(Cards, null=True, blank=True, on_delete=models.CASCADE)
+	item_count = models.PositiveIntegerField(default=0)
+	total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+	created = models.DateTimeField(auto_now_add=True)
 
 	def save(self):
 		new_id = random.randint(1000000000,9999999999)

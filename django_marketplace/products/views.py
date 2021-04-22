@@ -126,6 +126,8 @@ def create_order_view(request):
 		form.instance.user = request.user
 		form.fields['delivery_address'].queryset = DeliveryAddress.objects.filter(user=request.user)
 		form.fields['card'].queryset = Cards.objects.filter(user=request.user)
+		form.instance.item_count = basket.item_count
+		form.instance.total = basket.total
 		if form.is_valid():
 			form.save()
 			order_id=form.instance.order_id
@@ -177,6 +179,14 @@ def view_order_view(request, order_id):
 	
 	}
 	return render(request, 'products/view_order.html', context)
+
+def order_list_view(request):
+	orders = Order.objects.filter(user=request.user)
+	context = {
+	'orders': orders,
+	}
+
+	return render(request, 'products/order_list.html', context)
 
 
 

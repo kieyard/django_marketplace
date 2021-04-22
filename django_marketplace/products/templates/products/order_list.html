@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+
+{% for order in orders %}
+
+<div class="basket">
+<a href="{% url 'products:view_order' order.order_id %}" > {{ order.order_id }} </a>
+
+<p>{{ order.item_count }} items</p>
+<p>£ {{ order.total }}</p>
+<p>ordered: {{ order.created }}</p>
+</div>
+<hr>
+
+{% endfor %}
+
+
+{% endblock %}
