@@ -22,7 +22,7 @@
 				<li class="pull-right"><a href="{% url 'accounts:settings' %}">Settings</a></li>
 				<li class="pull-right">logged in as: {{ request.user.first_name }} </li>
 				<li class="pull-right"><a href="{% url 'accounts:logout' %}">Logout</a></li>
-				<li class="pull-right"><a href="{% url 'accounts:seller_signup' %}">Sell</a></li>
+				<li class="pull-right"><a href="{% url 'accounts:sellers_hub' %}">Sell</a></li>
 			{% endif %}
 		</ol>
 	</div>

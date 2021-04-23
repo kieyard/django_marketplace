@@ -4,6 +4,7 @@ from .models import CustomUser, DeliveryAddress, Cards
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib import messages
+from products.models import Basket
 
 import stripe
 from django.conf import settings
@@ -17,7 +18,8 @@ def signup_view(request, *args, **kwargs):
 		if form.is_valid():
 			user = form.save()
 			login(request, user)
-			return redirect('accounts:signup')
+			my_basket, created = Basket.objects.get_or_create(user=user)
+			return redirect('products:product_list')
 
 	context = {
 		'form': form
@@ -31,7 +33,7 @@ def login_view(request):
 		if form.is_valid():
 			user = form.get_user()
 			login(request, user)
-			return redirect('accounts:login')
+			return redirect('products:product_list')
 	else:
 		form = AuthenticationForm()
 
@@ -47,93 +49,89 @@ def logout_view(request):
 
 def seller_signup_view(request):
 	obj = CustomUser.objects.get(email=request.user.email)
-	if obj.is_seller == False:
-		data = {'email': obj.email, 'first_name': obj.first_name, 'last_name': obj.last_name}
-		form = StripeConnectSetupForm(initial=data)
-		if request.method == 'POST':
-			form = StripeConnectSetupForm(request.POST, request.FILES)
-			if form.is_valid() and form.cleaned_data['accept_TOS']:
-				idf = stripe.File.create(
-					purpose="identity_document",
-					file=form.cleaned_data['identity_document_front']
-				)
-				idb = stripe.File.create(
-					purpose="identity_document",
-					file=form.cleaned_data['identity_document_back']
-				)
-				addi = stripe.File.create(
-					purpose="identity_document",
-					file=form.cleaned_data['additional_ID']
-				)
-				
-				account = stripe.Account.create(
-					type="custom",
-					country=form.cleaned_data['country'],
-					email=form.cleaned_data['email'],
-					capabilities={
-						"card_payments": {"requested": True},
-						"transfers": {"requested": True},
+	data = {'email': obj.email, 'first_name': obj.first_name, 'last_name': obj.last_name}
+	form = StripeConnectSetupForm(initial=data)
+	if request.method == 'POST':
+		form = StripeConnectSetupForm(request.POST, request.FILES)
+		if form.is_valid() and form.cleaned_data['accept_TOS']:
+			idf = stripe.File.create(
+				purpose="identity_document",
+				file=form.cleaned_data['identity_document_front']
+			)
+			idb = stripe.File.create(
+				purpose="identity_document",
+				file=form.cleaned_data['identity_document_back']
+			)
+			addi = stripe.File.create(
+				purpose="identity_document",
+				file=form.cleaned_data['additional_ID']
+			)
+			
+			account = stripe.Account.create(
+				type="custom",
+				country=form.cleaned_data['country'],
+				email=form.cleaned_data['email'],
+				capabilities={
+					"card_payments": {"requested": True},
+					"transfers": {"requested": True},
+				},
+				business_type='individual',
+				individual = {
+					"address":{
+						"city": form.cleaned_data['city'],
+						"country": form.cleaned_data['country'],
+						"line1": form.cleaned_data['address_line_1'],
+						"line2": form.cleaned_data['address_line_2'],
+						"postal_code": form.cleaned_data['postal_code']
 					},
-					business_type='individual',
-					individual = {
-						"address":{
-							"city": form.cleaned_data['city'],
-							"country": form.cleaned_data['country'],
-							"line1": form.cleaned_data['address_line_1'],
-							"line2": form.cleaned_data['address_line_2'],
-							"postal_code": form.cleaned_data['postal_code']
+					"dob":{
+						"day": form.cleaned_data['DOB'].day,
+						"month": form.cleaned_data['DOB'].month,
+						"year":form.cleaned_data['DOB'].year
+					},
+					"email": form.cleaned_data['email'],
+					"first_name":form.cleaned_data['first_name'],
+					"last_name":form.cleaned_data['last_name'],
+					"phone": form.cleaned_data['phone'],
+					"verification":{
+						"document":{
+							"front": idf.id,
+							"back": idb.id,
 						},
-						"dob":{
-							"day": form.cleaned_data['DOB'].day,
-							"month": form.cleaned_data['DOB'].month,
-							"year":form.cleaned_data['DOB'].year
-						},
-						"email": form.cleaned_data['email'],
-						"first_name":form.cleaned_data['first_name'],
-						"last_name":form.cleaned_data['last_name'],
-						"phone": form.cleaned_data['phone'],
-						"verification":{
-							"document":{
-								"front": idf.id,
-								"back": idb.id,
-							},
-							"additional_document":{
-								"front": addi.id,
-							},
+						"additional_document":{
+							"front": addi.id,
 						},
 					},
-					business_profile={
-						'mcc': '4225',
-						'url': 'djangomarket.com'
-					},
-					external_account = {
-						'object': 'bank_account',
-						'country': form.cleaned_data['country'],
-						'currency': 'GBP',
-						'account_holder_name': form.cleaned_data['first_name'] + form.cleaned_data['last_name'],
-						'routing_number': form.cleaned_data['payout_sort_code'] ,
-						'account_number': form.cleaned_data['payout_account_number'] ,
-					},
-					tos_acceptance={
-						'date': int(time.time()),
-						'ip': '8.8.8.8',
-					}
-				)
+				},
+				business_profile={
+					'mcc': '4225',
+					'url': 'djangomarket.com'
+				},
+				external_account = {
+					'object': 'bank_account',
+					'country': form.cleaned_data['country'],
+					'currency': 'GBP',
+					'account_holder_name': form.cleaned_data['first_name'] + form.cleaned_data['last_name'],
+					'routing_number': form.cleaned_data['payout_sort_code'] ,
+					'account_number': form.cleaned_data['payout_account_number'] ,
+				},
+				tos_acceptance={
+					'date': int(time.time()),
+					'ip': '8.8.8.8',
+				}
+			)
 
-				obj = CustomUser.objects.get(email=request.user.email)
-				obj.stripe_seller_id = account.id
-				obj.stripe_seller_TOS_accepted = True
-				obj.is_seller = True
-				obj.save()
+			obj = CustomUser.objects.get(email=request.user.email)
+			obj.stripe_seller_id = account.id
+			obj.stripe_seller_TOS_accepted = True
+			obj.is_seller = True
+			obj.save()
 
-		context = {
-			'form' : form
-		}
+	context = {
+		'form' : form
+	}
 
-		return render(request, 'accounts/seller_signup.html', context)
-
-	elif obj.is_seller == True:
-		return redirect('products:create_product')
+	return render(request, 'accounts/seller_signup.html', context)
 
 
 
@@ -218,3 +216,10 @@ def add_delivery_address_view(request):
 	}
 	return render(request, 'accounts/add_delivery_address.html', context)
 
+
+def sellers_hub_view(request):
+	obj = CustomUser.objects.get(email=request.user.email)
+	if obj.is_seller == False:
+		return redirect('accounts:seller_signup')
+	else:
+		return render(request, 'accounts/sellers_hub.html')
