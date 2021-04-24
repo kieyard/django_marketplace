@@ -54,8 +54,10 @@ class Order(models.Model):
 	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
 	delivery_address = models.ForeignKey(DeliveryAddress, null=True, blank=True, on_delete=models.CASCADE)
 	card = models.ForeignKey(Cards, null=True, blank=True, on_delete=models.CASCADE)
-	item_count = models.PositiveIntegerField(default=0)
+	product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
+	quantity = models.PositiveIntegerField()
 	total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+	paid_status = models.BooleanField(default=False)
 	created = models.DateTimeField(auto_now_add=True)
 
 	def save(self):
@@ -71,11 +73,7 @@ class Order(models.Model):
 				continue
 		super(Order, self).save()
 
-class OrderItem(models.Model):
- 	order_id = models.ForeignKey(Order, null=True, blank=True, on_delete=models.CASCADE)
- 	product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
- 	quantity = models.PositiveIntegerField()
- 	paid_status = models.BooleanField(default=False)
+
 
 
 

@@ -15,5 +15,5 @@ class AddToBasketForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
 	class Meta:
 		model = Order
-		exclude = ['order_id','user','item_count','total']
+		exclude = ['order_id','user','product','quantity','total','paid_status','created']
 		

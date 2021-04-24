@@ -2,28 +2,30 @@
 
 {% block content %}
 
+<h1>Order</h1>
+<hr>
+
 <p>Order: {{ order.order_id }}</p>
 <p>Delivered to: {{ order.delivery_address}} </p>
 <p>Paid Via: {{ order.card }} </p>
 <p>Created: {{order.created }}</p>
 
-{% for item in order_items %}
 
 <div class="basket">
-<a href='{{ item.product.get_absolute_url }}' > {{ item.product.title }} </a>
+<a href='{{ order.product.get_absolute_url }}' > {{ order.product.title }} </a>
 
-{% if item.product.image %}
-<img src="{{ item.product.image.url }}"> 
+{% if order.product.image %}
+<img src="{{ order.product.image.url }}"> 
 {% endif %}
 
-<p> Description: {{ item.product.description }} </p>
-<p> Price: {{ item.product.price }} </p>
-<p> Quantity: {{ item.quantity }}</p>
+<p> Description: {{ order.product.description }} </p>
+<p> Price: {{ order.product.price }} </p>
+<p> Quantity: {{ order.quantity }}</p>
 
 </div>
 <hr>
 
-{% endfor %}
+
 
 <!-- <div>
 	<p> {{ basket.item_count }} items in basket</p>

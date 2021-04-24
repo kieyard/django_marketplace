@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ProductForm, AddToBasketForm, OrderForm
-from .models import Product, Basket, AddToBasket, Order, OrderItem
+from .models import Product, Basket, AddToBasket, Order
 from accounts.models import DeliveryAddress, Cards
 
 # Create your views here.
@@ -118,20 +118,49 @@ def basket_view(request):
 def create_order_view(request):
 	basketItems = AddToBasket.objects.filter(basket__user__exact=request.user)
 	basket = get_object_or_404(Basket, user=request.user)
+	
 	form = OrderForm()
+	form.instance.user=request.user
 	form.fields['delivery_address'].queryset = DeliveryAddress.objects.filter(user=request.user)
 	form.fields['card'].queryset = Cards.objects.filter(user=request.user)
+	
 	if request.method == 'POST':
 		form = OrderForm(request.POST, request.FILES)
-		form.instance.user = request.user
+		form.instance.user=request.user
 		form.fields['delivery_address'].queryset = DeliveryAddress.objects.filter(user=request.user)
 		form.fields['card'].queryset = Cards.objects.filter(user=request.user)
-		form.instance.item_count = basket.item_count
-		form.instance.total = basket.total
+		
 		if form.is_valid():
-			form.save()
-			order_id=form.instance.order_id
-			return redirect('products:create_order_and_order_items', order_id)
+			for item in basketItems:
+				if (item.product.quantity >= item.quantity):
+					continue
+				else:
+					basket.item_count -= item.quantity
+					basket.total -= item.product.price * item.quantity
+					basket.save()
+					item.delete()
+					return redirect('products:basket')
+
+			for item in basketItems: 
+				form.instance.user=request.user
+				form.instance.product = item.product
+				form.instance.quantity = item.quantity
+				form.instance.total = item.product.price * item.quantity
+			
+				form.save()
+				form = form = OrderForm(request.POST, request.FILES)
+				
+				item.product.quantity -= item.quantity
+				item.product.save()
+
+			for item in basketItems:
+				item.delete()
+
+			basket.item_count = 0
+			basket.total = 0
+			basket.save()
+				
+			return redirect('products:order_list')
 
 	context = {
 		'form' : form,
@@ -140,43 +169,12 @@ def create_order_view(request):
 	}
 	return render(request, 'products/create_order.html', context)
 
-def create_order_and_order_items(request, order_id):
-	basket = get_object_or_404(Basket, user=request.user)
-	basketItems = AddToBasket.objects.filter(basket__user__exact=request.user)
-	for item in basketItems:
-		if (item.product.quantity >= item.quantity):
-			continue
-		else:
-			basket.item_count -= item.quantity
-			basket.total -= item.product.price * item.quantity
-			basket.save()
-			item.delete()
-			return redirect('products:basket')
-
-	for item in basketItems:
-		order = get_object_or_404(Order, order_id=order_id)
-		order_item, created = OrderItem.objects.get_or_create(order_id=order, product=item.product, quantity=item.quantity)
-		item.product.quantity -= item.quantity
-		item.product.save()
-
-	for item in basketItems:
-		item.delete()
-
-	basket.item_count = 0
-	basket.total = 0
-	basket.save()
-
-	return redirect('products:view_order', order_id=order_id)
-
 
 def view_order_view(request, order_id):
 	order = get_object_or_404(Order, order_id__exact=order_id)
-	order_items = OrderItem.objects.filter(order_id=order)
 
 	context={
 	'order': order,
-	'order_items' : order_items,
-	
 	}
 	return render(request, 'products/view_order.html', context)
 

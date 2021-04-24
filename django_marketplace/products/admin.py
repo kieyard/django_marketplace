@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Product, Basket, AddToBasket, Order, OrderItem
+from .models import Product, Basket, AddToBasket, Order 
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -34,17 +34,12 @@ admin.site.register(Basket, BasketAdmin)
 
 
 
-class OrderItemInLine(admin.TabularInline):
-	model = OrderItem
-	extra = 0
-
-
 class OrderAdmin(admin.ModelAdmin):
 	model = Order
-	list_display = ('order_id',)
+	list_display = ('order_id','user','product','created')
 	fieldsets = (
-		(None, {'fields':('order_id', 'user', 'delivery_address', 'card', 'item_count', 'total')}),)
-	inlines = [OrderItemInLine]
+		(None, {'fields':('order_id', 'user', 'delivery_address', 'card', 'product','quantity','total','paid_status','created')}),)
+	readonly_fields = ['created',]
 
 
 
