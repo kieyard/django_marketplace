@@ -52,6 +52,7 @@ class AddToBasket(models.Model):
 class Order(models.Model):
 	order_id = models.IntegerField(unique=True)
 	user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE)
+	seller = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE, related_name='seller')
 	delivery_address = models.ForeignKey(DeliveryAddress, null=True, blank=True, on_delete=models.CASCADE)
 	card = models.ForeignKey(Cards, null=True, blank=True, on_delete=models.CASCADE)
 	product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)

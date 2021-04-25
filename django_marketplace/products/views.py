@@ -143,6 +143,7 @@ def create_order_view(request):
 
 			for item in basketItems: 
 				form.instance.user=request.user
+				form.instance.seller = item.product.listedBy
 				form.instance.product = item.product
 				form.instance.quantity = item.quantity
 				form.instance.total = item.product.price * item.quantity
@@ -179,7 +180,7 @@ def view_order_view(request, order_id):
 	return render(request, 'products/view_order.html', context)
 
 def order_list_view(request):
-	orders = Order.objects.filter(user=request.user)
+	orders = Order.objects.filter(user=request.user).order_by('-created')
 	context = {
 	'orders': orders,
 	}

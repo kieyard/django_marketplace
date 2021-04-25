@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<h1>Orders</h1>
+<hr>
+
+{% for order in orders %}
+
+<div class="basket">
+<a href="{% url 'products:view_order' order.order_id %}" > {{ order.order_id }} </a>
+
+{% if order.product.image %}
+<img src="{{ order.product.image.url }}"> 
+{% endif %}
+
+<p>{{ order.product.title }}</p>
+<p>{{ order.quantity }} items</p>
+<p>£ {{ order.total }}</p>
+<p>status: {% if order.paid_status %} Paid {% else %} Waiting Payment {% endif %} </p>
+<p>ordered: {{ order.created }}</p>
+</div>
+<hr>
+
+{% endfor %}
+
+
+{% endblock %}

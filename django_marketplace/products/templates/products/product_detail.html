@@ -2,17 +2,20 @@
 
 
 {% block content %}
-<h1>{{object.title}}</h1>
+
+<h1>{{ object.title }}</h1>
+
+<hr>
 
 {% if object.image %}
 <img src="{{ object.image.url }}"> 
 {% endif %}
 
-<p>description: {{object.description}}</p>
-<p>price: £{{object.price}}</p>
-<p>summary: {{object.summary}}</p>
-<p>is featured: {{object.featured}}</p>
-
+<p>Description: {{ object.description }}</p>
+<p>Price: £{{ object.price }}</p>
+<p>Summary: {{ object.summary }}</p>
+<p>Is featured: {{ object.featured }}</p>
+<p>Avaliable: {{ object.quantity }}</p>
 <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
 	{{form}}
 	<button type="submit">add to basket</button>

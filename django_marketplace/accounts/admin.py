@@ -31,6 +31,7 @@ class OrderInLine(admin.TabularInline):
 	model = Order
 	extra = 0
 	show_change_link = True
+	fk_name = 'user'
 
 class CustomUserAdmin(UserAdmin):
 	add_form = CustomUserCreationForm

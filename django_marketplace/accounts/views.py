@@ -4,7 +4,7 @@ from .models import CustomUser, DeliveryAddress, Cards
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib import messages
-from products.models import Basket
+from products.models import Basket, Order
 
 import stripe
 from django.conf import settings
@@ -223,3 +223,12 @@ def sellers_hub_view(request):
 		return redirect('accounts:seller_signup')
 	else:
 		return render(request, 'accounts/sellers_hub.html')
+
+
+def orders_sold_view(request):
+	orders = Order.objects.filter(seller=request.user).order_by('-created')
+	context = {
+	'orders': orders,
+	}
+
+	return render(request, 'accounts/orders_sold.html', context)
