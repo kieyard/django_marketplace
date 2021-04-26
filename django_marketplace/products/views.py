@@ -53,6 +53,8 @@ def product_list_view(request, *args, **kwargs):
 	}
 	return render(request, 'products/product_list.html', context)
 
+
+
 def create_product_view(request, *args, **kwargs):
 	form = ProductForm()
 	if request.method == 'POST':
