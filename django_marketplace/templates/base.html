@@ -12,7 +12,7 @@
 		<ol class="breadcrumb">
 			<li><a href="{% url 'pages:home' %}">Home</a></li>
 			<li><a href="{% url 'products:product_list' %}">Products</a></li>
-			<li><a href="{% url 'products:order_list'%}">Orders</a></li>
+			<li><a href="{% url 'orders:order_list'%}">Orders</a></li>
 
 			{% if not request.user.is_authenticated %}
 				<li class='pull-right'><a href="{% url 'accounts:signup' %}">Sign Up</a></li>

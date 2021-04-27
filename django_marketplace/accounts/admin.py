@@ -6,7 +6,8 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser, DeliveryAddress, Cards
 
-from products.models import Product, Basket, AddToBasket, Order
+from products.models import Product, Basket, AddToBasket
+from orders.models import Order
 
 class DeliveryAddressesInLine(admin.TabularInline):
 	model = DeliveryAddress

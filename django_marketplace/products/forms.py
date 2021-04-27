@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Product, AddToBasket, Order
+from .models import Product, AddToBasket
 
 class ProductForm(forms.ModelForm):
 	class Meta:
@@ -11,9 +11,3 @@ class AddToBasketForm(forms.ModelForm):
 	class Meta:
 		model = AddToBasket
 		exclude = ['user','product','basket']
-
-class OrderForm(forms.ModelForm):
-	class Meta:
-		model = Order
-		exclude = ['order_id','user','product','quantity','total','paid_status','created']
-		

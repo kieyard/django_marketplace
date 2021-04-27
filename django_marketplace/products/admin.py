@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Product, Basket, AddToBasket, Order 
+from .models import Product, Basket, AddToBasket
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -34,13 +34,3 @@ admin.site.register(Basket, BasketAdmin)
 
 
 
-class OrderAdmin(admin.ModelAdmin):
-	model = Order
-	list_display = ('order_id','user','product','created')
-	fieldsets = (
-		(None, {'fields':('order_id', 'user','seller', 'delivery_address', 'card', 'product','quantity','total','paid_status','created')}),)
-	readonly_fields = ['created',]
-
-
-
-admin.site.register(Order, OrderAdmin)

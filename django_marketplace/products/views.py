@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import ProductForm, AddToBasketForm, OrderForm
-from .models import Product, Basket, AddToBasket, Order
+from .forms import ProductForm, AddToBasketForm
+from .models import Product, Basket, AddToBasket
 from accounts.models import DeliveryAddress, Cards
 
 # Create your views here.

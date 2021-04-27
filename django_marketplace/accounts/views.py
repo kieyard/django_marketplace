@@ -4,7 +4,8 @@ from .models import CustomUser, DeliveryAddress, Cards
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib import messages
-from products.models import Basket, Order
+from products.models import Basket
+from orders.models import Order
 
 import stripe
 from django.conf import settings
