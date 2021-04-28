@@ -226,10 +226,4 @@ def sellers_hub_view(request):
 		return render(request, 'accounts/sellers_hub.html')
 
 
-def orders_sold_view(request):
-	orders = Order.objects.filter(seller=request.user).order_by('-created')
-	context = {
-	'orders': orders,
-	}
 
-	return render(request, 'accounts/orders_sold.html', context)

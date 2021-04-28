@@ -78,3 +78,11 @@ def order_list_view(request):
 	return render(request, 'orders/order_list.html', context)
 
 
+def orders_sold_view(request):
+	orders = Order.objects.filter(seller=request.user).order_by('-created')
+	context = {
+	'orders': orders,
+	}
+
+	return render(request, 'orders/orders_sold.html', context)
+

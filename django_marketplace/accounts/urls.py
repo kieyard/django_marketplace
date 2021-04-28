@@ -14,5 +14,4 @@ urlpatterns = [
     path('add_card/', views.add_card_view, name='add_card'),
     path('add_delivery_address/', views.add_delivery_address_view, name='add_delivery_address'),
     path('sellers_hub/', views.sellers_hub_view, name='sellers_hub'),
-    path('orders_sold/', views.orders_sold_view, name='orders_sold'),
 ]
