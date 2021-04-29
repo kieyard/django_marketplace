@@ -16,6 +16,7 @@ class Order(models.Model):
 	quantity = models.PositiveIntegerField()
 	total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
 	paid_status = models.BooleanField(default=False)
+	shipping_status = models.BooleanField(default=False)
 	created = models.DateTimeField(auto_now_add=True)
 
 	def save(self):

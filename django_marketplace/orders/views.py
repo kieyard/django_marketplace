@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import OrderForm
+from .forms import OrderForm, MarkAsShippedForm
 from .models import Order
 from accounts.models import DeliveryAddress, Cards
 from products.models import Basket, AddToBasket
@@ -85,4 +85,20 @@ def orders_sold_view(request):
 	}
 
 	return render(request, 'orders/orders_sold.html', context)
+
+
+def view_sold_order_view(request, order_id):
+	order = get_object_or_404(Order, order_id__exact=order_id)
+	form = MarkAsShippedForm(instance=order)
+	if request.method == 'POST':
+		form = MarkAsShippedForm(request.POST, request.FILES, instance=order)
+		if form.is_valid():
+			order = form.save()
+			return redirect('orders:orders_sold')
+
+	context={
+	'order': order,
+	'form': form,
+	}
+	return render(request, 'orders/view_sold_order.html', context)
 

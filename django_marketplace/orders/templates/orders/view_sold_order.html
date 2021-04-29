@@ -23,7 +23,17 @@
 <p> Quantity: {{ order.quantity }}</p>
 <p>status: {% if order.shipping_status %} Shipped {% elif order.paid_status %} Paid {% else %} Waiting Payment {% endif %} </p>
 
+
 </div>
 <hr>
+
+{% if not order.shipping_status %}
+<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+	{{form}}
+
+
+
+	<button type="submit" class="btn btn-primary">Mark as Shipped</button>
+{% endif %}
 
 {% endblock %}
