@@ -21,3 +21,11 @@ img{
 	padding: 10px;
 	height: 150px;
 }
+
+.search{
+	position: relative;
+	height: 120px;
+	left:25%;
+	width: 50%;
+	text-align: left;
+}

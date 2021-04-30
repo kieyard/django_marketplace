@@ -2,11 +2,19 @@
 
 {% block content %}
 <br>
-
-<form method='GET' action='.'>
-	search for product: <input type="search" name="title_search">
-	<button type="submit"> search </button>
-</form>
+<div class='search'>
+	<form method='GET' action='.'>
+		Title: <input type="search" name="title_search">
+		<br>
+		Price: 
+		<br>
+			Min: <input type="search" name="price_min"> 
+		<br>
+			Max: <input type="search" name="price_max">
+		<br>
+		<button type="submit"> Search </button>
+	</form>
+</div>
 
 {% for instance in object_list %}
 

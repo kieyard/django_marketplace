@@ -44,9 +44,20 @@ def update_product_view(request, item_id, *args, **kwargs):
 def product_list_view(request, *args, **kwargs):
 	queryset = Product.objects.all()
 	title_search_query = request.GET.get('title_search')
+	price_min_query = request.GET.get('price_min')
+	price_max_query = request.GET.get('price_max')
 
-	if title_search_query != '' and title_search_query is not None:
-		queryset = queryset.filter(title__icontains=title_search_query)
+	if price_min_query is None or price_min_query == '':
+		price_min_query = 0.00
+	if price_max_query is None or price_max_query == '':
+		arg = Product.objects.all().order_by('-price').first()
+		price_max_query = arg.price
+
+	if ((title_search_query != '' and title_search_query is not None)
+	or (price_max_query != '' and price_max_query is not None)
+	or (price_min_query!='' and price_min_query is not None)):
+		queryset = queryset.filter(title__icontains=title_search_query).filter(price__range=(price_min_query, price_max_query))
+	
 
 	context = {
 		'object_list' : queryset
