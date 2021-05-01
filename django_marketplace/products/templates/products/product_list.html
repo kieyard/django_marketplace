@@ -12,6 +12,12 @@
 		<br>
 			Max: <input type="search" name="price_max">
 		<br>
+		<select name = "category">
+			<option value="" selected>------</option>
+			<option value = "Jewellery" selected>Jewellery</option>
+			<option value = "Industrial">Industrial</option>
+		</select>
+		<br>
 		<button type="submit"> Search </button>
 	</form>
 </div>
@@ -27,6 +33,7 @@
 
 <p> Description: {{ instance.description }} </p>
 <p> Price: {{ instance.price }} </p>
+<p> Category: {{ instance.category }}</p>
 <p> Listed By: {{ instance.listedBy }}</p>
 <p>{{ instance.quantity }} avaliable <a href="{% url 'products:add_to_basket' instance.item_id 1 %}"><button>Add To Basket</button></a></p>
 </div>

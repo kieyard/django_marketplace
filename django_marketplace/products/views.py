@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ProductForm, AddToBasketForm
-from .models import Product, Basket, AddToBasket
+from .models import Product, Basket, AddToBasket, Category
 from accounts.models import DeliveryAddress, Cards
 
 # Create your views here.
@@ -46,6 +46,10 @@ def product_list_view(request, *args, **kwargs):
 	title_search_query = request.GET.get('title_search')
 	price_min_query = request.GET.get('price_min')
 	price_max_query = request.GET.get('price_max')
+	try:
+		category_query = Category.objects.get(category = request.GET.get('category'))
+	except Category.DoesNotExist:
+		category_query = ''
 
 	if price_min_query is None or price_min_query == '':
 		price_min_query = 0.00
@@ -53,10 +57,10 @@ def product_list_view(request, *args, **kwargs):
 		arg = Product.objects.all().order_by('-price').first()
 		price_max_query = arg.price
 
-	if ((title_search_query != '' and title_search_query is not None)
-	or (price_max_query != '' and price_max_query is not None)
-	or (price_min_query!='' and price_min_query is not None)):
+	if title_search_query != '' and title_search_query is not None:
 		queryset = queryset.filter(title__icontains=title_search_query).filter(price__range=(price_min_query, price_max_query))
+	if category_query != '' and category_query is not None:
+		queryset = queryset.filter(category=category_query)
 	
 
 	context = {

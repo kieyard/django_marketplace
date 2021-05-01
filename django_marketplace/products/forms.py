@@ -11,3 +11,4 @@ class AddToBasketForm(forms.ModelForm):
 	class Meta:
 		model = AddToBasket
 		exclude = ['user','product','basket']
+

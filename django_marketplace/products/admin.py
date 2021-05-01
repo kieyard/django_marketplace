@@ -1,14 +1,14 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Product, Basket, AddToBasket
+from .models import Product, Basket, AddToBasket, Category
 
 
 class ProductAdmin(admin.ModelAdmin):
 	model = Product
 	list_display = ('item_id','title','description','price')
 	fieldsets = (
-		(None, {'fields':('item_id', 'title','image','description','price','summary', 'quantity','featured', 'listedBy')}),) 
+		(None, {'fields':('item_id', 'title','image','description','price','category','summary', 'quantity','featured', 'listedBy')}),) 
 
 admin.site.register(Product, ProductAdmin)
 
@@ -33,4 +33,11 @@ class BasketAdmin(admin.ModelAdmin):
 admin.site.register(Basket, BasketAdmin)
 
 
+class CategoryAdmin(admin.ModelAdmin):
+	model = Category
+	list_display = ('category',)
+	fieldsets = (
+		(None, {'fields':('category',)}),)
 
+
+admin.site.register(Category, CategoryAdmin)
