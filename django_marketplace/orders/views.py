@@ -102,3 +102,8 @@ def view_sold_order_view(request, order_id):
 	}
 	return render(request, 'orders/view_sold_order.html', context)
 
+def mark_order_as_shipped(request, order_id):
+	order = get_object_or_404(Order, order_id__exact=order_id)
+	order.shipping_status = True
+	order.save()
+	return redirect('orders:orders_sold')

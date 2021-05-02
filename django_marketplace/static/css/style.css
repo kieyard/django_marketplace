@@ -11,7 +11,7 @@
 }
 
 img{
-	max-height: 150px;
+	max-height: 180px;
 	float: left
 }
 
@@ -19,7 +19,7 @@ img{
 	position: relative;
 	margin-top: 15px; 
 	padding: 10px;
-	height: 150px;
+	height: 200px;
 }
 
 .search{

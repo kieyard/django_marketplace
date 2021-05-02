@@ -20,14 +20,15 @@ class Order(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 
 	def save(self):
-		new_id = random.randint(1000000000,9999999999)
-		while True:
-			try:
-				test_unique_id = Order.objects.get(order_id=new_id)
-			except Order.DoesNotExist:
-				self.order_id = new_id
-				break
-			else:
-				new_id = random.randint(1000000000,9999999999)
-				continue
+		if self.order_id == None:
+			new_id = random.randint(1000000000,9999999999)
+			while True:
+				try:
+					test_unique_id = Order.objects.get(order_id=new_id)
+				except Order.DoesNotExist:
+					self.order_id = new_id
+					break
+				else:
+					new_id = random.randint(1000000000,9999999999)
+					continue
 		super(Order, self).save()

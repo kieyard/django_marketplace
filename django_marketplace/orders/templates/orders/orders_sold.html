@@ -8,17 +8,22 @@
 {% for order in orders %}
 
 <div class="basket">
-<a href="{% url 'orders:view_sold_order' order.order_id %}" > {{ order.order_id }} </a>
+	<a href="{% url 'orders:view_sold_order' order.order_id %}" > {{ order.order_id }} </a>
 
-{% if order.product.image %}
-<img src="{{ order.product.image.url }}"> 
-{% endif %}
+	{% if order.product.image %}
+		<img src="{{ order.product.image.url }}"> 
+	{% endif %}
 
-<p>{{ order.product.title }}</p>
-<p>{{ order.quantity }} items</p>
-<p>£ {{ order.total }}</p>
-<p>status: {% if order.shipping_status %} Shipped {% elif order.paid_status %} Paid {% else %} Waiting Payment {% endif %} </p>
-<p>ordered: {{ order.created }}</p>
+	<p>{{ order.product.title }}</p>
+	<p>{{ order.quantity }} items</p>
+	<p>£ {{ order.total }}</p>
+	<p>ordered: {{ order.created }}</p>
+	<p>status: {% if order.shipping_status %} Shipped {% elif order.paid_status %} Paid {% else %} Waiting Payment {% endif %} </p>
+
+	{% if not order.shipping_status %}
+		<a href="{% url 'orders:mark_order_as_shipped' order.order_id %}"><button>Mark As Shipped</button></a>
+	{% endif %}
+
 </div>
 <hr>
 
