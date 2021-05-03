@@ -39,7 +39,7 @@ def create_order_view(request):
 				form.instance.total = item.product.price * item.quantity
 			
 				form.save()
-				form = form = OrderForm(request.POST, request.FILES)
+				form = OrderForm(request.POST, request.FILES)
 				
 				item.product.quantity -= item.quantity
 				item.product.save()

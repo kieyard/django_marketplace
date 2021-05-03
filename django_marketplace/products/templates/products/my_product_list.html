@@ -2,26 +2,7 @@
 
 {% block content %}
 <br>
-<div class='search'>
-	<form method='GET' action='.'>
-		Title: <input type="search" name="title_search">
-		<br>
-		Price: 
-		<br>
-			Min: <input type="search" name="price_min"> 
-		<br>
-			Max: <input type="search" name="price_max">
-		<br>
-		<select name = "category">
-			<option value="" selected>------</option>
-			<option value = "Jewellery" selected>Jewellery</option>
-			<option value = "Industrial">Industrial</option>
-			<option value="Health">Health</option>
-		</select>
-		<br>
-		<button type="submit"> Search </button>
-	</form>
-</div>
+
 
 {% for instance in object_list %}
 

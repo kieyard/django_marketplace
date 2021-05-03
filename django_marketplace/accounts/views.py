@@ -128,6 +128,8 @@ def seller_signup_view(request):
 			obj.is_seller = True
 			obj.save()
 
+			return redirect('accounts:sellers_hub')
+
 	context = {
 		'form' : form
 	}
