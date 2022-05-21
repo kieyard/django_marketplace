@@ -106,16 +106,23 @@ def product_detail_view(request, item_id, *args, **kwargs):
 
 
 def add_to_basket(request, item_id, quantity=1):
-	my_basket, created = Basket.objects.get_or_create(user=request.user)
-	obj = get_object_or_404(Product, item_id = item_id)
-	if (obj.quantity >= quantity):
-		entry = AddToBasket.objects.create(product=obj, basket=my_basket, quantity=quantity)
-		my_basket.total += entry.quantity * entry.product.price
-		my_basket.item_count += entry.quantity
-		my_basket.save()
-		return redirect('products:basket')
-	else:
-		return redirect('products:product_detail', item_id)
+	try:	
+		my_basket, created = Basket.objects.get_or_create(user=request.user)
+	except:
+		print()
+	try:
+		obj = get_object_or_404(Product, item_id = item_id)
+	
+		if (obj.quantity >= quantity):
+			entry = AddToBasket.objects.create(product=obj, basket=my_basket, quantity=quantity)
+			my_basket.total += entry.quantity * entry.product.price
+			my_basket.item_count += entry.quantity
+			my_basket.save()
+			return redirect('products:basket')
+		else:
+			return redirect('products:product_detail', item_id)
+	except:
+		return redirect('accounts:login')
 
 def delete_add_to_basket_entry(request, id):
 	my_basket = get_object_or_404(Basket, user=request.user)
