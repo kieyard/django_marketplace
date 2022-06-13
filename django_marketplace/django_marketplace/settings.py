@@ -139,7 +139,7 @@ if DEBUG:
     STRIPE_PUBLISHABLE_KEY = 'pk_test_51IWpvZI9p9BwnQVR4vapnG2EU4rsG5aXti3ivJqh0Rg0dBfweLEVWCCBRmybjckkInMbWnWD0Q10DDGCFZIDAA80008snPzwEa'
     STRIPE_SECRET_KEY = 'sk_test_51IWpvZI9p9BwnQVRH0Hhm8ylGWDkUoaXgfWVoFzbVIkxZAp92002TQcuGRTqxkKtuPFbNmOGu1Z1m9UkhaEdxzq500zaqhM3KP'
 
-else:
-    #live keys
-    STRIPE_PUBLISHABLE_KEY = 'pk_live_51IWpvZI9p9BwnQVR9GxkPftXlf0YCGE4WVgvor3p6MnhDdHFxuQGsMeGLN92fJN8UJf9lmjsil8smA5segAoraND00ubemyOnu'
-    STRIPE_SECRET_KEY = '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'
+#else:
+    # Insert live keys below.
+ #   STRIPE_PUBLISHABLE_KEY = ''
+  #  STRIPE_SECRET_KEY = ''

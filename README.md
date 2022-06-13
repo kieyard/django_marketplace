@@ -85,3 +85,62 @@ You can navigate to the settings page by clicking 'Settings' on the top right me
 
 From this page you can update you login details, add a delivery address and add another payment card.
 
+## Admin mode
+To go into admin mode, with the server running navigate to http://127.0.0.1:8000/admin in your browser
+log in using:
+Username: admin@admin.admin
+Passeword: admin
+
+Inside the admin portal you can access the differnt users, orders, products catagories and users baskets 
+
+### Custom users
+In the customer users menu on the admin portal you can see a list of all the users and wether they are a buyer or seller.
+
+By clicking into a user you can: 
+-Reset there password if needed
+-Update there email, first name and last name.
+-View the date they joined and their stripe information 
+-modifiy there permission
+-See there associated card and address details
+-See there current basket
+-See all there orders new and old
+-See all the products they have for sale
+
+### Groups
+Currently this is unused but will be for grouping users and assigning them permissions in bulk. 
+
+### Orders
+Within the orders menu you can see all the orders made, who ceated the order and what they brought.
+
+Inside each order you can see:
+-The order ID
+-Buyer info
+-Seller info
+-Delivery address
+-Purchase card
+-Product details
+-Order total
+-Payment and shipping status
+
+### Basket 
+Inside the basket menu you can see a list of users with a basket.
+You can click on the user and see what is in there basket.
+You can also see this info via the custom users menu
+
+### catagories
+Inside the catagories menu you can see all the catagory options and make new ones if needed
+
+### Products
+Inside the products menu you can see a list of all the products listed on the site.
+
+If you click on the product you can update:
+-ID
+-Title
+-Image
+-description 
+-price
+-catagory
+-summary 
+-quantity 
+-featured status
+-seller info 
